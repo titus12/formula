@@ -1,8 +1,9 @@
 package fs
+
 import (
-"fmt"
-"github.com/xymodule/formula/opt"
-"reflect"
+	"fmt"
+	"github.com/titus12/formula/opt"
+	"reflect"
 )
 
 type OrFunction struct {
@@ -27,7 +28,7 @@ func (f *OrFunction) Evaluate(context *opt.FormulaContext, args ...*opt.LogicalE
 	}*/
 
 	retArg := arg0.Bool()
-	if retArg.Value.(bool){
+	if retArg.Value.(bool) {
 		return opt.NewArgumentWithType(true, reflect.Bool), nil
 	}
 
@@ -40,7 +41,7 @@ func (f *OrFunction) Evaluate(context *opt.FormulaContext, args ...*opt.LogicalE
 		return nil, fmt.Errorf("the second argument of function %s should be bool", f.Name())
 	}*/
 	retArg = arg1.Bool()
-	if retArg.Value.(bool){
+	if retArg.Value.(bool) {
 		return opt.NewArgumentWithType(true, reflect.Bool), nil
 	}
 	return opt.NewArgumentWithType(false, reflect.Bool), nil

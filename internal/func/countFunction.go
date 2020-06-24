@@ -1,8 +1,8 @@
 package _func
 
 import (
-"github.com/xymodule/formula/opt"
-"reflect"
+	"github.com/titus12/formula/opt"
+	"reflect"
 )
 
 type CountFunction struct {

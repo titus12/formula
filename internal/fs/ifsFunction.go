@@ -2,7 +2,7 @@ package fs
 
 import (
 	"fmt"
-	"github.com/xymodule/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 
@@ -18,7 +18,7 @@ func (f *IfsFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logical
 		return nil, fmt.Errorf("function %s need more than two arguments", f.Name())
 	}
 
-	for i := 0; i < len(args); i+=2 {
+	for i := 0; i < len(args); i += 2 {
 		arg, err := (*args[i]).Evaluate(context)
 		if err != nil {
 			return nil, err
@@ -32,11 +32,9 @@ func (f *IfsFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logical
 			return opt.NewArgument(arg2.Value), nil
 		}
 	}
-	return opt.NewArgumentWithType(0,reflect.Float64), nil
+	return opt.NewArgumentWithType(0, reflect.Float64), nil
 }
 
 func NewIfsFunction() *IfsFunction {
 	return &IfsFunction{}
 }
-
-

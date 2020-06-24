@@ -2,8 +2,8 @@ package _func
 
 import (
 	"fmt"
-	luaf "github.com/xymodule/formula/internal/lua"
-	"github.com/xymodule/formula/opt"
+	luaf "github.com/titus12/formula/internal/lua"
+	"github.com/titus12/formula/opt"
 	lua "github.com/yuin/gopher-lua"
 	"reflect"
 	"regexp"

@@ -1,7 +1,7 @@
 package _func
 
 import (
-	"github.com/xymodule/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 
@@ -24,7 +24,7 @@ func (f *SumFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logical
 		if err != nil {
 			return nil, err
 		}
-		v,_ := a.Float64()
+		v, _ := a.Float64()
 		sum += v
 	}
 	return opt.NewArgumentWithType(sum, reflect.Float64), nil

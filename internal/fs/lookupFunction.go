@@ -2,7 +2,7 @@ package fs
 
 import (
 	"fmt"
-	"github.com/xymodule/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 
@@ -27,7 +27,7 @@ func (f *LookupFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logi
 	}
 	v0, _ := arg0.Float64()
 
-	for i := 1; i < len(args); i+=2 {
+	for i := 1; i < len(args); i += 2 {
 		arg, err := (*args[i]).Evaluate(context)
 		if err != nil {
 			return nil, err
@@ -41,11 +41,9 @@ func (f *LookupFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logi
 			return opt.NewArgument(arg2.Value), nil
 		}
 	}
-	return opt.NewArgumentWithType(0,reflect.Float64), nil
+	return opt.NewArgumentWithType(0, reflect.Float64), nil
 }
 
 func NewLookupFunction() *LookupFunction {
 	return &LookupFunction{}
 }
-
-
