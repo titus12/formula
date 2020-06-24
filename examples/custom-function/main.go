@@ -13,7 +13,6 @@ import (
 	//log2 "github.com/sirupsen/logrus"
 )
 
-
 func main() {
 	//go http.ListenAndServe("0.0.0.0:6060", nil)
 	//log2.Fatal("aaaa")
@@ -55,7 +54,7 @@ func main() {
 	defer timer.Stop()
 	for {
 		select {
-		case <- timer.C:
+		case <-timer.C:
 			for i := 0; i < count; i++ {
 				//func(id int) {
 				go func(id int) {
@@ -81,6 +80,7 @@ func main() {
 						"')"+
 						")]", outerVars)*/
 					outerVars["match.win"] = 1
+					outerVars["match.lose"] = 1
 					outerVars["match.count"] = 10
 					outerVars["match.count.quick"] = "[@match.win + 1]"
 					outerVars["match.count.ladder"] = 2
@@ -89,10 +89,10 @@ func main() {
 					outerVars["match.lose.aaa.quick"] = 5
 					outerVars["match.lose.bbb.quick"] = 2
 					outerVars["match.lose.ccc.ladder"] = 3
-					outerVars["match.lose$2$3#2"] = "[count(@match.lose.aaa.quick)]"
+					//outerVars["match.lose$2$3#2"] = "[count(@match.lose.aaa.quick)]"
 					//r, err := HandleFormula("[sum(@match.count.*,@match.win.*,@match.win+2,@match.lose)*2]", outerVars)
-					//r, err := HandleFormula("[@match.lose*2]", outerVars)
-					r, err := HandleFormula("[avg(@match.win,sum(@match.lose$2$3#2 * 3,10),3,4,5)]", outerVars)
+					r, err := HandleFormula("[@match.lose*2]", outerVars)
+					//r, err := HandleFormula("[avg(@match.win,sum(@match.lose$2$3#2 * 3,10),3,4,5)]", outerVars)
 					//wg.Done()
 					if err != nil {
 						fmt.Printf("%v concurrent error!!! \n", id)
@@ -104,7 +104,7 @@ func main() {
 					fmt.Printf("%v [count(@match.win,@match.lose.*.quick,2,3,4,5)] = %v \n", id, r)
 				}(i)
 			}
-			timer.Stop()
+			//timer.Stop()
 		}
 	}
 	wg.Wait()
@@ -202,9 +202,10 @@ func main() {
 
 	log.Println("custom function succeed")
 
-	 */
+	*/
 	log.Println("formula succeed")
 }
+
 /*
 func Factorial(n int)int {
 	if n == 0 {
@@ -214,68 +215,67 @@ func Factorial(n int)int {
 }
 */
 
-func HandleFormula(formulaStr interface{},vars map[string]interface{})(result interface{},err error){
-	defer func(){
-		if err := recover(); err!=nil{//������panic�쳣
-			fmt.Printf("formula err %v\n",err)
+func HandleFormula(formulaStr interface{}, vars map[string]interface{}) (result interface{}, err error) {
+	defer func() {
+		if err := recover(); err != nil { //������panic�쳣
+			fmt.Printf("formula err %v\n", err)
 		}
 	}()
-	result,err = ExecFormula(formulaStr,vars)
+	result, err = ExecFormula(formulaStr, vars)
 	return
 }
 
 //vars["xx1"] = "[@xx2 * 5]"
 //vars["xx2"] = "[3*5]"
 //((2>@xx1)?1:3)
-func ExecFormula(formulaStr interface{},vars map[string]interface{})(result interface{},err error){
-	if !isFormula(formulaStr){
-		return formulaStr,nil
+func ExecFormula(formulaStr interface{}, vars map[string]interface{}) (result interface{}, err error) {
+	if !isFormula(formulaStr) {
+		return formulaStr, nil
 	}
 	newFormulaStr := formulaStr.(string)
-	newFormulaStr = newFormulaStr[1:len(newFormulaStr)-1]
+	newFormulaStr = newFormulaStr[1 : len(newFormulaStr)-1]
 	newFormulaStr = luaFormula(newFormulaStr)
 	//newFormulaStr = wildcardParams(newFormulaStr,vars)
-	expression:=formula.NewExpression(newFormulaStr)
+	expression := formula.NewExpression(newFormulaStr)
 	err = expression.Precompile()
-	if err != nil{
-		return nil,err
+	if err != nil {
+		return nil, err
 	}
 	//��ȡ����
 	params := expression.GetParameterNames()
-	for _,p := range params{
-		if v, ok := vars[p]; ok{
-			f,err := ExecFormula(v,vars)
-			if err != nil{
-				return nil,err
+	for _, p := range params {
+		if v, ok := vars[p]; ok {
+			f, err := ExecFormula(v, vars)
+			if err != nil {
+				return nil, err
 			}
 			expression.AddParameter(p, f)
-		}else{
-			return nil,fmt.Errorf("formula param %v missing",p)
+		} else {
+			return nil, fmt.Errorf("formula param %v missing", p)
 		}
 	}
 	//��ȡ���
-	refResult,err := expression.GetResult()
-	if err != nil{
-		return nil,err
+	refResult, err := expression.GetResult()
+	if err != nil {
+		return nil, err
 	}
-	v:= refResult.Value
+	v := refResult.Value
 	//log.Printf("formula:%v = %v\n",formulaStr,v)
-	return v,err
+	return v, err
 }
 
-func isFormula(formulaStr interface{}) bool{
-	if f,ok := formulaStr.(string);ok{
-		if strings.HasPrefix(f,"["){
+func isFormula(formulaStr interface{}) bool {
+	if f, ok := formulaStr.(string); ok {
+		if strings.HasPrefix(f, "[") {
 			return true
 		}
 	}
 	return false
 }
 
-
-func wildcardParams(formulaStr string,vars map[string]interface{}) string{
+func wildcardParams(formulaStr string, vars map[string]interface{}) string {
 	var checkWildcard bool
-	for _,v := range formula.WildcardSymbols {
+	for _, v := range formula.WildcardSymbols {
 		count := strings.Count(formulaStr, v)
 		if count > 0 {
 			checkWildcard = true
@@ -286,50 +286,50 @@ func wildcardParams(formulaStr string,vars map[string]interface{}) string{
 		return formulaStr
 	}
 	exp := regexp.MustCompile(formula.WildcardRegexp)
-	matched :=exp.FindAllStringSubmatch(formulaStr,-1)
-	if len(matched) <= 0{
+	matched := exp.FindAllStringSubmatch(formulaStr, -1)
+	if len(matched) <= 0 {
 		return formulaStr
 	}
-	for _,v:= range matched{
-		s := strings.Split(strings.TrimSpace(v[1][1:]),".")
+	for _, v := range matched {
+		s := strings.Split(strings.TrimSpace(v[1][1:]), ".")
 		var newFormulaStr string
 		prefix := strings.TrimSpace(s[0])
-		LOOP_PARAMS:
-			for k,_ := range vars {
-				if strings.HasPrefix(k,prefix){
-					ss := strings.Split(k, ".")
-					if len(ss) != len(s){
+	LOOP_PARAMS:
+		for k, _ := range vars {
+			if strings.HasPrefix(k, prefix) {
+				ss := strings.Split(k, ".")
+				if len(ss) != len(s) {
+					continue LOOP_PARAMS
+				}
+				for i, sv := range s {
+					if sv != ss[i] && sv != "*" {
 						continue LOOP_PARAMS
 					}
-					for i,sv := range s{
-						if sv != ss[i] && sv != "*"{
-							continue LOOP_PARAMS
-						}
-					}
-					newFormulaStr += fmt.Sprintf("@%v,",k)
 				}
+				newFormulaStr += fmt.Sprintf("@%v,", k)
 			}
-			formulaStr = strings.Replace(formulaStr,v[1],newFormulaStr[0:len(newFormulaStr)-1],1)
+		}
+		formulaStr = strings.Replace(formulaStr, v[1], newFormulaStr[0:len(newFormulaStr)-1], 1)
 	}
 	return formulaStr
 }
 
-func luaFormula(formulaStr string) string{
-	count :=  strings.Count(formulaStr,"lua(")
-	if count <= 0{
+func luaFormula(formulaStr string) string {
+	count := strings.Count(formulaStr, "lua(")
+	if count <= 0 {
 		return formulaStr
 	}
 	exp := regexp.MustCompile(formula.LuaFunctionRegexp)
-	matched :=exp.FindAllStringSubmatch(formulaStr,count)
-	if len(matched) > 0{
-		for _,v:= range matched{
-			newFormulaStr := strings.TrimSpace(v[0][0:len(v[0])-1])
-			params := strings.Split(v[1],",")
-			for _,v := range params{
+	matched := exp.FindAllStringSubmatch(formulaStr, count)
+	if len(matched) > 0 {
+		for _, v := range matched {
+			newFormulaStr := strings.TrimSpace(v[0][0 : len(v[0])-1])
+			params := strings.Split(v[1], ",")
+			for _, v := range params {
 				newFormulaStr += (",@" + v)
 			}
 			newFormulaStr += ")"
-			formulaStr = strings.Replace(formulaStr,v[0],newFormulaStr,1)
+			formulaStr = strings.Replace(formulaStr, v[0], newFormulaStr, 1)
 		}
 	}
 	return formulaStr

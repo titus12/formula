@@ -2,6 +2,7 @@ package fs
 
 import (
 	"github.com/titus12/formula/internal/cache"
+	_func "github.com/titus12/formula/internal/func"
 	"github.com/titus12/formula/opt"
 )
 
