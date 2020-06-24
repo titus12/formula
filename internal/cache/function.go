@@ -2,12 +2,12 @@ package cache
 
 import (
 	"fmt"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 	"strings"
 	"sync"
 )
 
-var defaultFunctionCache = make(map[string]*opt.Function, 256)
+var defaultFunctionCache = make(map[string]*opt.Function, 512)
 var rwLock sync.RWMutex
 
 func Register(f *opt.Function) error {

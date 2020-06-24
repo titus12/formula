@@ -2,11 +2,11 @@ package fs
 
 import (
 	"fmt"
-	"github.com/yidane/formula/internal/exp"
+	"github.com/titus12/formula/internal/exp"
 	"strings"
 	"testing"
 
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 )
 
 func TestAbsFunction_Evaluate(t *testing.T) {

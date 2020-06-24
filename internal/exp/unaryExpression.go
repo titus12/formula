@@ -2,7 +2,7 @@ package exp
 
 import (
 	"fmt"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 

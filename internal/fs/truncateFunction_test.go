@@ -2,12 +2,12 @@ package fs
 
 import (
 	"fmt"
-	"github.com/yidane/formula/internal/exp"
+	"github.com/titus12/formula/internal/exp"
 	"math"
 	"strconv"
 	"testing"
 
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 )
 
 func TestTruncateFunction_Evaluate(t *testing.T) {

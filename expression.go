@@ -7,19 +7,24 @@ import (
 	"strings"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
-	"github.com/yidane/formula/internal/cache"
-	"github.com/yidane/formula/internal/exp"
+	"github.com/titus12/formula/internal/cache"
+	"github.com/titus12/formula/internal/exp"
 	//register system functions
-	_ "github.com/yidane/formula/internal/fs"
-	"github.com/yidane/formula/internal/parser"
-	"github.com/yidane/formula/opt"
+	_ "github.com/titus12/formula/internal/fs"
+	"github.com/titus12/formula/internal/parser"
+	"github.com/titus12/formula/opt"
 )
+
+var LuaFunctionRegexp = `lua[('\s]+function[\w\s]+\(([a-zA-Z0-9,\s]+)\).*?end\'\)`
+var WildcardRegexp = `(@[\w\d\.]+(\.\*)+[\.\w\d\*]*)[,\s)]`
+var WildcardSymbols = []string{"sum(", "count", "avg"}
 
 //Expression for build user's input
 type Expression struct {
 	context            *opt.FormulaContext
 	originalExpression string
 	parsedExpression   *opt.LogicalExpression
+	paramNames         []string
 }
 
 //NewExpression create new Expression
@@ -38,9 +43,10 @@ func (expression *Expression) compile() error {
 	}
 
 	//restore expression from cache
-	logicExpression := cache.Restore(expression.context.Option, expression.originalExpression)
-	if logicExpression != nil {
-		expression.parsedExpression = logicExpression
+	expressionCache := cache.Restore(expression.context.Option, expression.originalExpression)
+	if expressionCache != nil {
+		expression.parsedExpression = expressionCache.LogicalExpression
+		expression.paramNames = expressionCache.ParamNames
 		return nil
 	}
 
@@ -51,6 +57,8 @@ func (expression *Expression) compile() error {
 	//handle compile error
 	errListener := newFormulaErrorListener()
 	formulaParser.AddErrorListener(errListener)
+	paramsListener := &CustomParamsListener{}
+	formulaParser.AddParseListener(paramsListener)
 	calcContext := formulaParser.Calc()
 
 	if errListener.HasError() {
@@ -58,6 +66,12 @@ func (expression *Expression) compile() error {
 	}
 
 	expression.parsedExpression = calcContext.GetRetValue()
+	expression.paramNames = paramsListener.GetParamNames()
+	cache.Store(expression.context.Option, expression.originalExpression,
+		&cache.ExpressionCache{
+			LogicalExpression: expression.parsedExpression,
+			ParamNames:        expression.paramNames,
+		})
 	return nil
 }
 
@@ -79,6 +93,26 @@ func (expression *Expression) AddParameter(name string, value interface{}) error
 
 	expression.context.Parameters[name] = value
 	return nil
+}
+
+func (expression *Expression) GetParameterNames() []string {
+	return expression.paramNames
+}
+
+func (expression *Expression) Precompile() error {
+	err := expression.compile()
+	if err != nil {
+		return nil
+	}
+	return err
+}
+
+func (expression *Expression) GetResult() (*opt.Argument, error) {
+	result, err := (*expression.parsedExpression).Evaluate(expression.context)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 //ResetParameters clear all parameter

@@ -56,8 +56,8 @@ type FormulaListener interface {
 	// EnterId is called when entering the id production.
 	EnterId(c *IdContext)
 
-	// EnterΠ is called when entering the π production.
-	EnterΠ(c *ΠContext)
+	// Enterπ is called when entering the π production.
+	Enterπ(c *πContext)
 
 	// ExitCalc is called when exiting the calc production.
 	ExitCalc(c *CalcContext)
@@ -107,6 +107,6 @@ type FormulaListener interface {
 	// ExitId is called when exiting the id production.
 	ExitId(c *IdContext)
 
-	// ExitΠ is called when exiting the π production.
-	ExitΠ(c *ΠContext)
+	// Exitπ is called when exiting the π production.
+	Exitπ(c *πContext)
 }

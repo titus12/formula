@@ -1,7 +1,7 @@
 package exp
 
 import (
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 

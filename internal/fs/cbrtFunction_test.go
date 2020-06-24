@@ -2,10 +2,10 @@ package fs
 
 import (
 	"fmt"
-	"github.com/yidane/formula/internal/exp"
+	"github.com/titus12/formula/internal/exp"
 	"testing"
 
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 )
 
 func TestCbrtFunction_Evaluate(t *testing.T) {

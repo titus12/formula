@@ -11,8 +11,8 @@ import (
 )
 
 import (
-	"github.com/yidane/formula/internal/exp"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/internal/exp"
+	"github.com/titus12/formula/opt"
 )
 
 // Suppress unused import errors
@@ -160,7 +160,7 @@ var literalNames = []string{
 	"", "'?'", "':'", "'||'", "'or'", "'&&'", "'and'", "'|'", "'^'", "'&'",
 	"'=='", "'='", "'!='", "'<>'", "'<'", "'<='", "'>'", "'>='", "'<<'", "'>>'",
 	"'+'", "'-'", "'*'", "'/'", "'%'", "'!'", "'not'", "'~'", "'('", "')'",
-	"','", "'\u03C0'", "'true'", "'false'",
+	"','", "'\u87FA'", "'true'", "'false'",
 }
 var symbolicNames = []string{
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
@@ -3345,14 +3345,14 @@ func (s *ValueContext) FALSE() antlr.TerminalNode {
 	return s.GetToken(FormulaParserFALSE, 0)
 }
 
-func (s *ValueContext) Π() IΠContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IΠContext)(nil)).Elem(), 0)
+func (s *ValueContext) π() IπContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IπContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(IΠContext)
+	return t.(IπContext)
 }
 
 func (s *ValueContext) GetRuleContext() antlr.RuleContext {
@@ -3487,7 +3487,7 @@ func (p *FormulaParser) Value() (localctx IValueContext) {
 		p.EnterOuterAlt(localctx, 7)
 		{
 			p.SetState(288)
-			p.Π()
+			p.π()
 		}
 		localctx.(*ValueContext).retValue = exp.NewPiExpression()
 
@@ -3662,33 +3662,33 @@ func (p *FormulaParser) Id() (localctx IIdContext) {
 	return localctx
 }
 
-// IΠContext is an interface to support dynamic dispatch.
-type IΠContext interface {
+// IπContext is an interface to support dynamic dispatch.
+type IπContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsΠContext differentiates from other interfaces.
-	IsΠContext()
+	// IsπContext differentiates from other interfaces.
+	IsπContext()
 }
 
-type ΠContext struct {
+type πContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyΠContext() *ΠContext {
-	var p = new(ΠContext)
+func NewEmptyπContext() *πContext {
+	var p = new(πContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
 	p.RuleIndex = FormulaParserRULE_π
 	return p
 }
 
-func (*ΠContext) IsΠContext() {}
+func (*πContext) IsπContext() {}
 
-func NewΠContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ΠContext {
-	var p = new(ΠContext)
+func NewπContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *πContext {
+	var p = new(πContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
@@ -3698,29 +3698,29 @@ func NewΠContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingS
 	return p
 }
 
-func (s *ΠContext) GetParser() antlr.Parser { return s.parser }
-func (s *ΠContext) GetRuleContext() antlr.RuleContext {
+func (s *πContext) GetParser() antlr.Parser { return s.parser }
+func (s *πContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *ΠContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *πContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *ΠContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *πContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FormulaListener); ok {
-		listenerT.EnterΠ(s)
+		listenerT.Enterπ(s)
 	}
 }
 
-func (s *ΠContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *πContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FormulaListener); ok {
-		listenerT.ExitΠ(s)
+		listenerT.Exitπ(s)
 	}
 }
 
-func (p *FormulaParser) Π() (localctx IΠContext) {
-	localctx = NewΠContext(p, p.GetParserRuleContext(), p.GetState())
+func (p *FormulaParser) π() (localctx IπContext) {
+	localctx = NewπContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 32, FormulaParserRULE_π)
 
 	defer func() {

@@ -117,8 +117,8 @@ func (s *BaseFormulaListener) EnterId(ctx *IdContext) {}
 // ExitId is called when production id is exited.
 func (s *BaseFormulaListener) ExitId(ctx *IdContext) {}
 
-// EnterΠ is called when production π is entered.
-func (s *BaseFormulaListener) EnterΠ(ctx *ΠContext) {}
+// Enterπ is called when production π is entered.
+func (s *BaseFormulaListener) Enterπ(ctx *πContext) {}
 
-// ExitΠ is called when production π is exited.
-func (s *BaseFormulaListener) ExitΠ(ctx *ΠContext) {}
+// Exitπ is called when production π is exited.
+func (s *BaseFormulaListener) Exitπ(ctx *πContext) {}

@@ -2,7 +2,7 @@ package exp
 
 import (
 	"fmt"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 
@@ -29,7 +29,7 @@ type VarIdentifierExpression struct {
 //NewVarIdentifierExpression create new custom parameter which output like '[Parameter]'
 func NewVarIdentifierExpression(name string) *opt.LogicalExpression {
 	var result opt.LogicalExpression = &VarIdentifierExpression{
-		Name: name[1 : len(name)-1],
+		Name: name[1:],
 	}
 
 	return &result

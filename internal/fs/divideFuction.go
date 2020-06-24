@@ -1,8 +1,7 @@
 package fs
 
 import (
-	"fmt"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 	"reflect"
 )
 
@@ -35,7 +34,9 @@ func (f *DivideFunction) Evaluate(context *opt.FormulaContext, args ...*opt.Logi
 	}
 
 	if v1 == 0 {
-		return nil, fmt.Errorf("divide by zero")
+		//fmt.Println("divide by zero")
+		return opt.NewArgumentWithType(float64(0), reflect.Float64), nil
+		//return nil, fmt.Errorf("divide by zero")
 	}
 
 	v0, err := arg0.Float64()

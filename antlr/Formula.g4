@@ -4,8 +4,8 @@ options{language=go;}
 
 @header {
 import (
-    "github.com/yidane/formula/opt"
-    "github.com/yidane/formula/internal/exp"
+    "formula/opt"
+    "formula/internal/exp"
 )
 }
 
@@ -124,7 +124,7 @@ FALSE   : 'false' ;
 NAME    : LETTER (LETTER | DIGIT)* ;
 INTEGER : DIGIT+  ;
 DATETIME: '#' (~('#')*) '#' ;
-VAR     : '[' (~(']')*) ']' ;
+VAR     : '@' (~('@') (LETTER | '.' | DIGIT)*) ;
 E       : ('E'|'e') ('+'|'-')? DIGIT+ ;
 π       : 'π' ;
 

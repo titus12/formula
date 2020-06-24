@@ -6,8 +6,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/yidane/formula/internal/fs"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/internal/fs"
+	"github.com/titus12/formula/opt"
+
 )
 
 func TestNewExpression(t *testing.T) {
@@ -245,7 +246,7 @@ func TestImplements(t *testing.T) {
 	fmt.Println(f.Evaluate(nil))
 
 	d := importer.For("source", nil)
-	pkg, err := d.Import("github.com/yidane/formula/internal/fs")
+	pkg, err := d.Import("formula/internal/fs")
 	if err != nil {
 		t.Fatal(err)
 	}

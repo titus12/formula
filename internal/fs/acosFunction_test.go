@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/yidane/formula/internal/exp"
+	"github.com/titus12/formula/internal/exp"
 
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/opt"
 )
 
 func TestAcosFunction_Evaluate(t *testing.T) {

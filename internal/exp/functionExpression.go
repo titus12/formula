@@ -1,8 +1,8 @@
 package exp
 
 import (
-	"github.com/yidane/formula/internal/cache"
-	"github.com/yidane/formula/opt"
+	"github.com/titus12/formula/internal/cache"
+	"github.com/titus12/formula/opt"
 )
 
 type FunctionExpression struct {
